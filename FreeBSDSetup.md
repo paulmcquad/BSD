@@ -123,3 +123,64 @@ Whether you create the user or not, you will see the following prompt:
 Add another user? (yes/no): no
 Goodbye!
 ```
+
+#### How To Grant Sudo Privileges
+
+On FreeBSD, like other Unix-like OSes, you may grant users with the ability to run commands with superuser privileges via the `sudo` command. The `sudo` command allows a user to run a command as another user. We will show you how to grant a normal user with superuser privileges, effectively allowing them to execute commands as `root`.
+
+On FreeBSD, users that are members of the `wheel` group are allowed to use `sudo`. This is due to the following line in the default **sudoers** file,
+
+While in **single user mode** on bootup:
+`vi /usr/local/etc/sudoers`:
+
+```
+Uncomment to allow members of group wheel to execute any command
+%wheel ALL=(ALL) ALL
+```
+
+#### How To Remove a User
+
+An easy way to remove a user from your FreeBSD system is to use the `rmuser` command. You may run it with no arguments, or pass the users you want to remove as arguments, and follow the prompts to complete the user removal process:
+
+```
+sudo rmuser
+```
+
+If you do not provide a user name as an argument, you will be prompted for one or more. Then you will be asked to confirm if you’re sure and if the user’s home directory should be removed:
+
+```
+Please enter one or more usernames: gamer
+Matching password entry:
+
+gamer:*:1002:1002::0:0:Gamer:/home/gamer:/bin/sh
+
+Is this the entry you wish to remove? y
+Remove user's home directory (/home/gamer)? y
+Removing user (gamer): mailspool home passwd.
+```
+
+#### How To Lock a User Account
+
+If you want to disable a user’s access to the system but not delete their account records and home directory, you may lock the account. The easiest way to disable a user is to use the `pw lock` command, with the user that you want to disable as an argument, like so:
+
+```
+sudo pw lock username
+```
+
+This command works by prepending “_LOCKED_” to the user’s entry in the `/etc/master.passwd` file.
+
+The user will be unable to log in until the account is unlocked.
+
+#### How To Unlock a User
+
+If you want to enable a user that was disabled with `pw lock`, you can use the`pw unlock`command to do so:
+
+```
+sudo pw unlock username
+```
+
+This command works by deleting “_LOCKED_”, if present, from the user’s entry in the`/etc/master.passwd` file.
+
+#### Conclusion
+
+You should now have a good understanding of basic user management on a FreeBSD server.
